@@ -13,12 +13,13 @@
         /// <summary>
         /// Returns an instance of the command to send the request.
         /// </summary>
-        /// <param name="request">The request data.</param>
+        /// <param name="request">Contains request parameters.</param>
+        /// <param name="response">Contains response data.</param>
         /// <returns>An instance of the command.</returns>
-        public static ICommand SendRequest(IRequestData request)
+        public static ICommand SendRequest(IRequestParameters request, IResponseData response)
         {
             var restApiClient = new RestApiClient();
-            return new SendRequestCommand(restApiClient, request);
+            return new SendRequestCommand(restApiClient, request, response);
         }
     }
 }

@@ -24,7 +24,12 @@
         /// <summary>
         /// Contains request data.
         /// </summary>
-        private readonly IRequestData _request;
+        private readonly IRequestParameters _request;
+
+        /// <summary>
+        /// Contains response data.
+        /// </summary>
+        private readonly IResponseData _response;
 
         /// <summary>
         /// Specifies that a request is currently being sent.
@@ -35,11 +40,13 @@
         /// Initializes a new instance of the <see cref="SendRequestCommand"/> class.
         /// </summary>
         /// <param name="restApiClient">REST client used for invoking endpoints.</param>
-        /// <param name="request">Contains request data.</param>
-        public SendRequestCommand(IRestApiClient restApiClient, IRequestData request)
+        /// <param name="request">Contains request parameters.</param>
+        /// <param name="response">Contains response data.</param>
+        public SendRequestCommand(IRestApiClient restApiClient, IRequestParameters request, IResponseData response)
         {
             _restApiClient = restApiClient;
             _request = request;
+            _response = response;
         }
 
         /// <inheritdoc />
@@ -62,7 +69,7 @@
             }
             catch (Exception ex)
             {
-                _request.ResponseBody = ex.Message;
+                _response.ResponseBody = ex.Message;
             }
             finally
             {
@@ -87,7 +94,7 @@
 
             var responseBody = await _restApiClient.GetAsync(requestUri).ConfigureAwait(false);
 
-            _request.ResponseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
+            _response.ResponseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
         }
 
         /// <summary>

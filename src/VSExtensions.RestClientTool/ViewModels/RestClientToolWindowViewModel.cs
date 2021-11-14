@@ -1,90 +1,36 @@
 ﻿namespace VSExtensions.RestClientTool.ViewModels
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
     using System.Windows.Input;
 
-    using VSExtensions.RestClientTool.Abstractions;
     using VSExtensions.RestClientTool.Commands;
-    using VSExtensions.RestClientTool.Models;
 
     /// <summary>
     /// The main user control view model.
     /// </summary>
-    internal class RestClientToolWindowViewModel : INotifyPropertyChanged, IRequestData
+    internal class RestClientToolWindowViewModel : ViewModelBase
     {
         /// <summary>
-        /// Selected request type.
+        /// Initializes a new instance of the <see cref="RestClientToolWindowViewModel"/> class.
         /// </summary>
-        private RequestType _requestType;
-
-        /// <summary>
-        /// Current request URI string.
-        /// </summary>
-        private string _requestUri = "http://localhost:5555/";
-
-        /// <summary>
-        /// The body of the response received after the request was sent
-        /// </summary>
-        private string _responseBody;
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Gets available request types.
-        /// </summary>
-        public IReadOnlyCollection<RequestType> AvailableRequestTypes => RequestTypesProvider.Get();
-
-        /// <summary>
-        /// Gets or sets selected request type.
-        /// </summary>
-        public RequestType RequestType
+        public RestClientToolWindowViewModel()
         {
-            get => _requestType;
-            set
-            {
-                _requestType = value;
-                OnPropertyChanged();
-            }
+            RequestViewModel = new RequestViewModel();
+            ResponseViewModel = new ResponseViewModel();
         }
 
         /// <summary>
-        /// Gets or sets current request URI string.
+        /// Gets a request view model containing logic for request customization.
         /// </summary>
-        public string RequestUri
-        {
-            get => _requestUri;
-            set
-            {
-                _requestUri = value;
-                OnPropertyChanged();
-            }
-        }
+        public RequestViewModel RequestViewModel { get; }
 
         /// <summary>
-        /// Gets or sets the body of the response received after the request was sent.
+        /// Gets a response view model, containing logic for response processing.
         /// </summary>
-        public string ResponseBody
-        {
-            get => _responseBody;
-            set
-            {
-                _responseBody = value;
-                OnPropertyChanged();
-            }
-        }
+        public ResponseViewModel ResponseViewModel { get; }
 
         /// <summary>
         /// Gets a command that sends a request to an endpoint.
         /// </summary>
-        public ICommand SendRequestCommand => CommandFactory.SendRequest(this);
-
-        /// <summary>
-        /// Safely invokes the <see cref="PropertyChanged"/> event.
-        /// </summary>
-        private void OnPropertyChanged([CallerMemberName] string propertyName = default) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public ICommand SendRequestCommand => CommandFactory.SendRequest(RequestViewModel, ResponseViewModel);
     }
 }

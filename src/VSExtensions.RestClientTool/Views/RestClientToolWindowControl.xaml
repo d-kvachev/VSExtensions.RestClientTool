@@ -28,27 +28,30 @@
         <DockPanel>
             
             <DockPanel DockPanel.Dock="Top" MinHeight="30">
-                <ComboBox
-                    DockPanel.Dock="Left"
-                    MinWidth="80"
-                    VerticalContentAlignment="Center"
-                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
-                    ItemsSource="{Binding AvailableRequestTypes}"
-                    SelectedItem="{Binding RequestType}"
-                />
                 <Button
                     DockPanel.Dock="Right"
                     MinWidth="80"
+                    Margin="7,0,0,0"
                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
                     Command="{Binding SendRequestCommand}"
                     Content="{StaticResource SendRequestBtnText}">
                 </Button>
-                <TextBox
-                    VerticalContentAlignment="Center"
-                    Margin="7,0"
-                    Style="{StaticResource VsTextBoxStyle}"
-                    Text="{Binding RequestUri, UpdateSourceTrigger=PropertyChanged}"
-                />
+                <DockPanel DataContext="{Binding RequestViewModel}">
+                    <ComboBox
+                        DockPanel.Dock="Left"
+                        MinWidth="80"
+                        VerticalContentAlignment="Center"
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
+                        ItemsSource="{Binding AvailableRequestTypes}"
+                        SelectedItem="{Binding RequestType}"
+                    />
+                    <TextBox
+                        VerticalContentAlignment="Center"
+                        Margin="7,0,0,0"
+                        Style="{StaticResource VsTextBoxStyle}"
+                        Text="{Binding RequestUri, UpdateSourceTrigger=PropertyChanged}"
+                    />
+                </DockPanel>
             </DockPanel>
             
             <Grid Margin="0,10,0,0">
@@ -60,7 +63,7 @@
                 <Border Grid.Row="0" Padding="5">
                 </Border>
 
-                <Border Grid.Row="1" Padding="5">
+                <Border Grid.Row="1" Padding="5" DataContext="{Binding ResponseViewModel}">
                     <DockPanel>
                         <TextBlock
                             DockPanel.Dock="Top"
