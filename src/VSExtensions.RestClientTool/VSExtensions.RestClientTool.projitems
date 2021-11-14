@@ -9,17 +9,36 @@
     <Import_RootNamespace>VSExtensions.RestClientTool</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)VSExtensionsRestClientToolPackage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientToolWindow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientToolWindowCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientToolWindowControl.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IResponseData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\CommandFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\SendRequestCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RequestType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IRestApiClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\RestApiClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shell\VSExtensionsRestClientToolPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shell\RestClientToolWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shell\RestClientToolWindowCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IRequestParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RequestViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ResponseViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RestClientToolWindowViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\RestClientToolWindowControl.xaml.cs">
       <DependentUpon>RestClientToolWindowControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)RestClientToolWindowControl.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Views\Resources\Strings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\RestClientToolWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Resources\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

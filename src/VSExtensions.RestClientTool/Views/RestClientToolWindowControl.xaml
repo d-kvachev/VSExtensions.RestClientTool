@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="VSExtensions.RestClientTool.Views.RestClientToolWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:vm="clr-namespace:VSExtensions.RestClientTool.ViewModels"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
+             Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
+             mc:Ignorable="d"
+             d:DesignHeight="1000" d:DesignWidth="1000"
+             Name="RestClientToolWindow">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Strings.xaml" />
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <vm:RestClientToolWindowViewModel />
+    </UserControl.DataContext>
+    
+    <Border Padding="10">
+        <DockPanel>
+            
+            <DockPanel DockPanel.Dock="Top" MinHeight="30">
+                <Button
+                    DockPanel.Dock="Right"
+                    MinWidth="80"
+                    Margin="7,0,0,0"
+                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                    Command="{Binding SendRequestCommand}"
+                    Content="{StaticResource SendRequestBtnText}">
+                </Button>
+                <DockPanel DataContext="{Binding RequestViewModel}">
+                    <ComboBox
+                        DockPanel.Dock="Left"
+                        MinWidth="80"
+                        VerticalContentAlignment="Center"
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
+                        ItemsSource="{Binding AvailableRequestTypes}"
+                        SelectedItem="{Binding RequestType}"
+                    />
+                    <TextBox
+                        VerticalContentAlignment="Center"
+                        Margin="7,0,0,0"
+                        Style="{StaticResource VsTextBoxStyle}"
+                        Text="{Binding RequestUri, UpdateSourceTrigger=PropertyChanged}"
+                    />
+                </DockPanel>
+            </DockPanel>
+            
+            <Grid Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"></RowDefinition>
+                    <RowDefinition Height="0.5*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Padding="5">
+                </Border>
+
+                <Border Grid.Row="1" Padding="5" DataContext="{Binding ResponseViewModel}">
+                    <DockPanel>
+                        <TextBlock
+                            DockPanel.Dock="Top"
+                            Margin="0,0,0,2"
+                            Text="{StaticResource ResponseBlockTitle}"
+                        />
+                        <TextBox
+                            TextWrapping="Wrap"
+                            AcceptsReturn="True"
+                            IsReadOnly="True"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.CanContentScroll="True"
+                            Padding="10"
+                            Style="{StaticResource VsTextBoxStyle}"
+                            Text="{Binding ResponseBody}"
+                        />
+                    </DockPanel>
+                </Border>
+
+            </Grid>
+        </DockPanel>
+    </Border>
+</UserControl>
