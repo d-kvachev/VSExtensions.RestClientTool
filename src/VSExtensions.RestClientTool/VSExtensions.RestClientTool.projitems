@@ -9,15 +9,15 @@
     <Import_RootNamespace>VSExtensions.RestClientTool</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)VSExtensionsRestClientToolPackage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientToolWindow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientToolWindowCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientToolWindowControl.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Shell\VSExtensionsRestClientToolPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shell\RestClientToolWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Shell\RestClientToolWindowCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\RestClientToolWindowControl.xaml.cs">
       <DependentUpon>RestClientToolWindowControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)RestClientToolWindowControl.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)Views\RestClientToolWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

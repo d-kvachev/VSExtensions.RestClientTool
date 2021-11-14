@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool
+﻿namespace VSExtensions.RestClientTool.Views
 {
     using System.Windows.Controls;
 

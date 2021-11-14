@@ -1,9 +1,11 @@
-﻿namespace VSExtensions.RestClientTool
+﻿namespace VSExtensions.RestClientTool.Shell
 {
     using System;
     using System.Runtime.InteropServices;
 
     using Microsoft.VisualStudio.Shell;
+
+    using VSExtensions.RestClientTool.Views;
 
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.

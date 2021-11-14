@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool
+﻿namespace VSExtensions.RestClientTool.Shell
 {
     using System;
     using System.ComponentModel.Design;
@@ -79,7 +79,7 @@
             // is actually the only one.
             // The last flag is set to true so that if the tool window does not exists it will be created.
             ToolWindowPane window = package.FindToolWindow(typeof(RestClientToolWindow), 0, true);
-            if ((null == window) || (null == window.Frame))
+            if (null == window || null == window.Frame)
             {
                 throw new NotSupportedException("Cannot create tool window");
             }

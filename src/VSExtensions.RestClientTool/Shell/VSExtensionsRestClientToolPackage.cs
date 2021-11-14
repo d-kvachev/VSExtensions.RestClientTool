@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool
+﻿namespace VSExtensions.RestClientTool.Shell
 {
     using System;
     using System.Runtime.InteropServices;
