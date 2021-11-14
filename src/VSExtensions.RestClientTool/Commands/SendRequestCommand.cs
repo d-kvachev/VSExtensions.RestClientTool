@@ -77,9 +77,15 @@
         /// <returns>A task that represents an asynchronous operation of sending the request.</returns>
         private async Task SendRequestAsync()
         {
-            var responseBody = _request.RequestType == RequestType.Get
-                ? await _restApiClient.GetAsync(_request.RequestUri).ConfigureAwait(false)
-                : throw new NotSupportedException($"Request type is not supported: '{_request.RequestType}'");
+            var uriValid = TryConvertToUri(_request.RequestUri, out var requestUri);
+            if (!uriValid)
+                throw new InvalidOperationException($"Invalid request URI: '{_request.RequestUri}'");
+
+            var requestTypeSupported = _request.RequestType == RequestType.Get;
+            if (!requestTypeSupported)
+                throw new NotSupportedException($"Request type is not supported: '{_request.RequestType}'");
+
+            var responseBody = await _restApiClient.GetAsync(requestUri).ConfigureAwait(false);
 
             _request.ResponseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
         }
@@ -105,6 +111,25 @@
 
             indented = JsonConvert.SerializeObject(deserialized, Formatting.Indented);
             return true;
+        }
+
+        /// <summary>
+        /// Attempts to convert string representation of request URI to an actual <see cref="Uri"/> object.
+        /// </summary>
+        /// <param name="uriString">URI string.</param>
+        /// <param name="uri">A <see cref="Uri"/> instance.</param>
+        /// <returns><c>true</c> if string was successfully converted to <see cref="Uri"/>, <c>false</c> otherwise.</returns>
+        private bool TryConvertToUri(string uriString, out Uri uri)
+        {
+            var wellFormedUri = !string.IsNullOrWhiteSpace(uriString) && Uri.IsWellFormedUriString(uriString, UriKind.Absolute);
+            if (wellFormedUri)
+            {
+                uri = new Uri(uriString, UriKind.Absolute);
+                return true;
+            }
+
+            uri = default;
+            return false;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿namespace VSExtensions.RestClientTool.Services
 {
+    using System;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -12,6 +13,6 @@
         /// </summary>
         /// <param name="requestUri">Request URI.</param>
         /// <returns>Response body.</returns>
-        Task<string> GetAsync(string requestUri);
+        Task<string> GetAsync(Uri requestUri);
     }
 }
