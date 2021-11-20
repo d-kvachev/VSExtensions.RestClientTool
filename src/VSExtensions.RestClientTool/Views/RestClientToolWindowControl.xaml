@@ -26,64 +26,129 @@
     
     <Border Padding="10">
         <DockPanel>
-            
-            <DockPanel DockPanel.Dock="Top" MinHeight="30">
-                <Button
-                    DockPanel.Dock="Right"
-                    MinWidth="80"
-                    Margin="7,0,0,0"
-                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
-                    Command="{Binding SendRequestCommand}"
-                    Content="{StaticResource SendRequestBtnText}">
-                </Button>
-                <DockPanel DataContext="{Binding RequestViewModel}">
-                    <ComboBox
-                        DockPanel.Dock="Left"
-                        MinWidth="80"
-                        VerticalContentAlignment="Center"
-                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
-                        ItemsSource="{Binding AvailableRequestTypes}"
-                        SelectedItem="{Binding RequestType}"
-                    />
-                    <TextBox
-                        VerticalContentAlignment="Center"
+            <DockPanel DockPanel.Dock="Top" Height="30">
+                <Button DockPanel.Dock="Right"
+                        Width="80"
                         Margin="7,0,0,0"
-                        Style="{StaticResource VsTextBoxStyle}"
-                        Text="{Binding RequestUri, UpdateSourceTrigger=PropertyChanged}"
-                    />
+                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                        Command="{Binding SendRequestCommand}"
+                        Content="{StaticResource SendRequestButtonContent}">
+                </Button>
+                
+                <DockPanel DataContext="{Binding RequestViewModel}">
+                    <ComboBox DockPanel.Dock="Left"
+                              Width="80"
+                              VerticalContentAlignment="Center"
+                              Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
+                              ItemsSource="{Binding AvailableRequestTypes}"
+                              SelectedItem="{Binding RequestType}" />
+                    <TextBox Margin="7,0,0,0"
+                             VerticalContentAlignment="Center"
+                             Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                             Text="{Binding RequestUri, UpdateSourceTrigger=PropertyChanged}" />
                 </DockPanel>
             </DockPanel>
             
             <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="0.5*"></RowDefinition>
-                    <RowDefinition Height="0.5*"></RowDefinition>
+                    <RowDefinition Height="0.5*" />
+                    <RowDefinition Height="0.5*" />
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" Padding="5">
-                </Border>
-
-                <Border Grid.Row="1" Padding="5" DataContext="{Binding ResponseViewModel}">
                     <DockPanel>
-                        <TextBlock
-                            DockPanel.Dock="Top"
-                            Margin="0,0,0,2"
-                            Text="{StaticResource ResponseBlockTitle}"
-                        />
-                        <TextBox
-                            TextWrapping="Wrap"
-                            AcceptsReturn="True"
-                            IsReadOnly="True"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                            ScrollViewer.CanContentScroll="True"
-                            Padding="10"
-                            Style="{StaticResource VsTextBoxStyle}"
-                            Text="{Binding ResponseBody}"
-                        />
+                        <TextBlock DockPanel.Dock="Top"
+                                   Margin="0,0,0,2"
+                                   Text="{StaticResource RequestBlockTitle}" />
+
+                        <TabControl TabStripPlacement="Top"
+                                    DataContext="{Binding RequestViewModel}"
+                                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabControlNavigationStyleKey}}">
+                            <TabItem DataContext="{Binding QueryParameters}"
+                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
+                                <TabItem.Header>
+                                    <TextBlock Text="{StaticResource QueryParametersTabHeader}" />
+                                </TabItem.Header>
+                                <TabItem.Content>
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Top" Padding="0,5">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                                                        Command="{Binding AddCommand}"
+                                                        Content="{StaticResource AddButtonContent}" />
+                                                <Separator Style="{StaticResource VsVerticalSeparator}" />
+                                                <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                                                        Command="{Binding RemoveDisabledCommand}"
+                                                        Content="{StaticResource RemoveDisabledButtonContent}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Grid DockPanel.Dock="Top" Height="15px">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.08*" />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{StaticResource QueryParameterEnabledColumnTitle}" />
+                                            <TextBlock Grid.Column="1" Text="{StaticResource QueryParameterNameColumnTitle}" />
+                                            <TextBlock Grid.Column="2" Text="{StaticResource QueryParameterValueColumnTitle}" />
+                                        </Grid>
+
+                                        <ScrollViewer>
+                                            <ItemsControl ItemsSource="{Binding Parameters}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Height="30px">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="0.08*" />
+                                                                <ColumnDefinition />
+                                                                <ColumnDefinition />
+                                                            </Grid.ColumnDefinitions>
+                                                            <CheckBox Grid.Column="0"
+                                                                      VerticalAlignment="Center"
+                                                                      HorizontalAlignment="Center"
+                                                                      Style="{DynamicResource {x:Static vsshell:VsResourceKeys.CheckBoxStyleKey}}"
+                                                                      IsChecked="{Binding Enabled}" />
+                                                            <TextBox Grid.Column="1"
+                                                                     Margin="1"
+                                                                     VerticalContentAlignment="Center"
+                                                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                                                                     Text="{Binding Key}" />
+                                                            <TextBox Grid.Column="2"
+                                                                     Margin="1"
+                                                                     VerticalContentAlignment="Center"
+                                                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                                                                     Text="{Binding Value}" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </DockPanel>
+                                </TabItem.Content>
+                            </TabItem>
+                        </TabControl>
                     </DockPanel>
                 </Border>
 
+                <Border Grid.Row="1"
+                        Padding="5"
+                        DataContext="{Binding ResponseViewModel}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top"
+                                   Margin="0,0,0,2"
+                                   Text="{StaticResource ResponseBlockTitle}" />
+                        <TextBox TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="True"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.CanContentScroll="True"
+                                 Padding="10"
+                                 Style="{StaticResource VsTextBoxStyle}"
+                                 Text="{Binding ResponseBody}" />
+                    </DockPanel>
+                </Border>
             </Grid>
         </DockPanel>
     </Border>

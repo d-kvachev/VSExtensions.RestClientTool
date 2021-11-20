@@ -2,7 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:clr="clr-namespace:System;assembly=mscorlib">
 
+    <clr:String x:Key="SendRequestButtonContent">Send</clr:String>
+    <clr:String x:Key="AddButtonContent">Add</clr:String>
+    <clr:String x:Key="RemoveDisabledButtonContent">Remove Disabled</clr:String>
+    
+    <clr:String x:Key="RequestBlockTitle">Customize Request</clr:String>
+    <clr:String x:Key="QueryParametersTabHeader">Query Parameters</clr:String>
+    <clr:String x:Key="QueryParameterEnabledColumnTitle">Enabled</clr:String>
+    <clr:String x:Key="QueryParameterNameColumnTitle">Parameter Name</clr:String>
+    <clr:String x:Key="QueryParameterValueColumnTitle">Parameter Value</clr:String>
+    
     <clr:String x:Key="ResponseBlockTitle">Response</clr:String>
-    <clr:String x:Key="SendRequestBtnText">Send</clr:String>
 
 </ResourceDictionary>

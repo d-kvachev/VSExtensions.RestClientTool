@@ -9,16 +9,31 @@
     <Import_RootNamespace>VSExtensions.RestClientTool</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IResponseData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\QueryParameters\AddCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\CommandBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\CommandFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\QueryParameters\RemoveDisabledCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\SendRequestCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\Abstractions\IInitializableDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\Abstractions\IQueryParametersDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\Abstractions\IRequestDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\Abstractions\IResponseDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\Abstractions\IRestClientToolDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\QueryParametersViewModelDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\RequestViewModelDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\ResponseViewModelDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Context\RestClientToolViewModelDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\QueryParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RequestSettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RequestType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ResponseData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IRestApiClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RestApiClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shell\VSExtensionsRestClientToolPackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shell\RestClientToolWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shell\RestClientToolWindowCommand.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IRequestParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QueryParameters\QueryParametersViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\QueryParameters\QueryParameterViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RequestViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ResponseViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RestClientToolWindowViewModel.cs" />

@@ -1,14 +1,15 @@
 ﻿namespace VSExtensions.RestClientTool.ViewModels
 {
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
-    using VSExtensions.RestClientTool.Abstractions;
+    using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.ViewModels.QueryParameters;
 
     /// <summary>
     /// A request view model containing logic for request customization.
     /// </summary>
-    internal class RequestViewModel : ViewModelBase, IRequestParameters
+    internal class RequestViewModel : ViewModelBase
     {
         /// <summary>
         /// Selected request type.
@@ -23,7 +24,7 @@
         /// <summary>
         /// Gets available request types.
         /// </summary>
-        public IReadOnlyCollection<RequestType> AvailableRequestTypes => RequestTypesProvider.Get();
+        public ObservableCollection<RequestType> AvailableRequestTypes { get; } = new ObservableCollection<RequestType>(RequestTypesProvider.Get());
 
         /// <summary>
         /// Gets or sets selected request type.
@@ -50,5 +51,16 @@
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Gets a query parameters view model containing logic for query customization.
+        /// </summary>
+        public QueryParametersViewModel QueryParameters { get; } = new QueryParametersViewModel();
+
+        /// <summary>
+        /// Sets request data context.
+        /// </summary>
+        /// <param name="context">Request data context.</param>
+        public void SetContext(IRequestDataContext context) => QueryParameters.SetContext(context.QueryParameters);
     }
 }

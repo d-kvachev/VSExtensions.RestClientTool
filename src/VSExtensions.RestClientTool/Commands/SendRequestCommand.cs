@@ -1,20 +1,22 @@
 ﻿namespace VSExtensions.RestClientTool.Commands
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Windows.Input;
 
     using Newtonsoft.Json;
 
-    using VSExtensions.RestClientTool.Abstractions;
+    using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
     using VSExtensions.RestClientTool.Services;
 
     /// <summary>
     /// Represents a command that sends a request to an endpoint.
     /// </summary>
-    internal class SendRequestCommand : ICommand
+    internal class SendRequestCommand : CommandBase
     {
         /// <summary>
         /// REST client used for invoking endpoints.
@@ -22,14 +24,14 @@
         private readonly IRestApiClient _restApiClient;
 
         /// <summary>
-        /// Contains request data.
+        /// Request data context.
         /// </summary>
-        private readonly IRequestParameters _request;
+        private readonly IRequestDataContext _request;
 
         /// <summary>
-        /// Contains response data.
+        /// Response data context.
         /// </summary>
-        private readonly IResponseData _response;
+        private readonly IResponseDataContext _response;
 
         /// <summary>
         /// Specifies that a request is currently being sent.
@@ -40,9 +42,9 @@
         /// Initializes a new instance of the <see cref="SendRequestCommand"/> class.
         /// </summary>
         /// <param name="restApiClient">REST client used for invoking endpoints.</param>
-        /// <param name="request">Contains request parameters.</param>
-        /// <param name="response">Contains response data.</param>
-        public SendRequestCommand(IRestApiClient restApiClient, IRequestParameters request, IResponseData response)
+        /// <param name="request">Request data context.</param>
+        /// <param name="response">Response data context.</param>
+        public SendRequestCommand(IRestApiClient restApiClient, IRequestDataContext request, IResponseDataContext response)
         {
             _restApiClient = restApiClient;
             _request = request;
@@ -50,14 +52,11 @@
         }
 
         /// <inheritdoc />
-        public event EventHandler CanExecuteChanged;
-
-        /// <inheritdoc />
-        public bool CanExecute(object parameter) => !_requestInProgress;
+        public override bool CanExecute(object parameter) => !_requestInProgress;
 
         /// <inheritdoc />
         [SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "All exceptions are handled")]
-        public async void Execute(object parameter)
+        public override async void Execute(object parameter)
         {
             _requestInProgress = true;
             OnCanExecuteChanged();
@@ -69,7 +68,8 @@
             }
             catch (Exception ex)
             {
-                _response.ResponseBody = ex.Message;
+                var response = new ResponseData(ex.Message);
+                _response.SetData(response);
             }
             finally
             {
@@ -79,22 +79,22 @@
         }
 
         /// <summary>
-        /// Sends a request to the endpoint specified in the request data and populates the response data.
+        /// Sends a request to the endpoint specified in the request context and populates data in the response context.
         /// </summary>
         /// <returns>A task that represents an asynchronous operation of sending the request.</returns>
         private async Task SendRequestAsync()
         {
-            var uriValid = TryConvertToUri(_request.RequestUri, out var requestUri);
-            if (!uriValid)
-                throw new InvalidOperationException($"Invalid request URI: '{_request.RequestUri}'");
+            var settings = _request.GetSettings();
+            var queryParameters = _request.QueryParameters.Enumerate();
 
-            var requestTypeSupported = _request.RequestType == RequestType.Get;
-            if (!requestTypeSupported)
-                throw new NotSupportedException($"Request type is not supported: '{_request.RequestType}'");
+            string responseBody;
+            using (var request = CreateRequest(settings, queryParameters))
+                responseBody = await _restApiClient.SendAsync(request).ConfigureAwait(false);
 
-            var responseBody = await _restApiClient.GetAsync(requestUri).ConfigureAwait(false);
+            responseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
 
-            _response.ResponseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
+            var response = new ResponseData(responseBody);
+            _response.SetData(response);
         }
 
         /// <summary>
@@ -121,6 +121,25 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="HttpRequestMessage"/> instance based on data provided.
+        /// </summary>
+        /// <param name="settings">Request settings.</param>
+        /// <param name="parameters">Request query parameters.</param>
+        /// <returns>A <see cref="HttpRequestMessage"/> instance.</returns>
+        /// <exception cref="InvalidOperationException">Invalid request URI.</exception>
+        private HttpRequestMessage CreateRequest(RequestSettings settings, IEnumerable<QueryParameter> parameters)
+        {
+            var uriValid = TryConvertToUri(settings.Uri, out var requestUri);
+            if (!uriValid)
+                throw new InvalidOperationException($"Invalid request URI: '{settings.Uri}'");
+
+            var httpMethod = ToHttpMethod(settings.Type);
+            requestUri = AppendQueryParameters(requestUri, parameters);
+
+            return new HttpRequestMessage(httpMethod, requestUri);
+        }
+
+        /// <summary>
         /// Attempts to convert string representation of request URI to an actual <see cref="Uri"/> object.
         /// </summary>
         /// <param name="uriString">URI string.</param>
@@ -140,9 +159,37 @@
         }
 
         /// <summary>
-        /// Safely invokes the <see cref="CanExecuteChanged"/> event.
+        /// Gets an <see cref="HttpMethod"/> value that corresponds to <paramref name="type"/> provided.
         /// </summary>
-        private void OnCanExecuteChanged() =>
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        /// <param name="type">The type of a request.</param>
+        /// <returns>A suitable HttpMethod value.</returns>
+        /// <exception cref="NotSupportedException">Request type is not supported.</exception>
+        private HttpMethod ToHttpMethod(RequestType type)
+        {
+            switch (type) {
+                case RequestType.Get: return HttpMethod.Get;
+                default: throw new NotSupportedException($"Request type is not supported: '{type}'");
+            }
+        }
+
+        /// <summary>
+        /// Appends query parameters string to request URI.
+        /// </summary>
+        /// <param name="requestUri">Request URI.</param>
+        /// <param name="parameters">Request query parameters.</param>
+        /// <returns>Request URI with query parameters.</returns>
+        private Uri AppendQueryParameters(Uri requestUri, IEnumerable<QueryParameter> parameters)
+        {
+            var queryParameters = parameters.Where(p => p.Enabled).Select(p => p.ToString()).ToList();
+            if (queryParameters.Count == 0)
+                return requestUri;
+
+            var queryParametersString = $"{string.Join("&", queryParameters)}";
+
+            var uriBuilder = new UriBuilder(requestUri);
+            uriBuilder.Query = queryParametersString;
+
+            return uriBuilder.Uri;
+        }
     }
 }
