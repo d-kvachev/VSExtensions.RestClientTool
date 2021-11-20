@@ -41,5 +41,8 @@
         /// Gets the header value.
         /// </summary>
         public string Value { get; }
+
+        /// <inheritdoc />
+        public override string ToString() => $"{Key}: {Value}";
     }
 }
