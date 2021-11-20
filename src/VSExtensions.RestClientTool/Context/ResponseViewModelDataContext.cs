@@ -1,7 +1,7 @@
 ﻿namespace VSExtensions.RestClientTool.Context
 {
     using VSExtensions.RestClientTool.Context.Abstractions;
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Response;
     using VSExtensions.RestClientTool.ViewModels;
 
     /// <summary>

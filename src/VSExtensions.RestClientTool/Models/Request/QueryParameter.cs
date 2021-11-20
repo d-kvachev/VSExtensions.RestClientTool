@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool.Models
+﻿namespace VSExtensions.RestClientTool.Models.Request
 {
     /// <summary>
     /// Contains data about a single query parameter of a request.

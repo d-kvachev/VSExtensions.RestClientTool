@@ -1,7 +1,7 @@
 ﻿namespace VSExtensions.RestClientTool.Commands.QueryParameters
 {
     using VSExtensions.RestClientTool.Context.Abstractions;
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
 
     /// <summary>
     /// Represents a command that adds a new query parameter to the request data.

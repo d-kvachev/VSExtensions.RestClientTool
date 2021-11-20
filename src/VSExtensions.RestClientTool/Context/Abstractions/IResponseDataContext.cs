@@ -1,6 +1,6 @@
 ﻿namespace VSExtensions.RestClientTool.Context.Abstractions
 {
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Response;
 
     /// <summary>
     /// Response data context interface.

@@ -11,6 +11,8 @@
 
     using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
+    using VSExtensions.RestClientTool.Models.Response;
     using VSExtensions.RestClientTool.Services;
 
     /// <summary>

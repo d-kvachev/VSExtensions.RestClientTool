@@ -28,10 +28,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Context\ResponseViewModelDataContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Context\RestClientToolViewModelDataContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\HttpHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\QueryParameter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\RequestSettings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\RequestType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\ResponseData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\QueryParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\RequestSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\RequestType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Response\ResponseData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IRestApiClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RestApiClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Shell\VSExtensionsRestClientToolPackage.cs" />

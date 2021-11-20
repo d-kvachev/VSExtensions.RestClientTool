@@ -1,7 +1,7 @@
 ﻿namespace VSExtensions.RestClientTool.Context
 {
     using VSExtensions.RestClientTool.Context.Abstractions;
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
     using VSExtensions.RestClientTool.ViewModels;
     using VSExtensions.RestClientTool.ViewModels.HttpHeaders;
     using VSExtensions.RestClientTool.ViewModels.QueryParameters;

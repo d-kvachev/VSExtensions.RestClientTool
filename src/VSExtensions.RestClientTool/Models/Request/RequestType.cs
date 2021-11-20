@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool.Models
+﻿namespace VSExtensions.RestClientTool.Models.Request
 {
     using System;
     using System.Collections.Generic;

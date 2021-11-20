@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
 
     /// <summary>
     /// Request query parameters data context interface.
