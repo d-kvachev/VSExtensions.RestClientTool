@@ -26,6 +26,8 @@
 
             _context = new RestClientToolViewModelDataContext();
             _context.Initialize(this);
+
+            RequestViewModel.SetContext(_context.Request);
         }
 
         /// <summary>

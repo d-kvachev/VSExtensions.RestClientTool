@@ -2,7 +2,9 @@
 {
     using System.Collections.ObjectModel;
 
+    using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.ViewModels.QueryParameters;
 
     /// <summary>
     /// A request view model containing logic for request customization.
@@ -49,5 +51,16 @@
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Gets a query parameters view model containing logic for query customization.
+        /// </summary>
+        public QueryParametersViewModel QueryParameters { get; } = new QueryParametersViewModel();
+
+        /// <summary>
+        /// Sets request data context.
+        /// </summary>
+        /// <param name="context">Request data context.</param>
+        public void SetContext(IRequestDataContext context) => QueryParameters.SetContext(context.QueryParameters);
     }
 }

@@ -8,6 +8,11 @@
     internal interface IRequestDataContext
     {
         /// <summary>
+        /// Gets query parameters data context.
+        /// </summary>
+        IQueryParametersDataContext QueryParameters { get; }
+
+        /// <summary>
         /// Returns request settings.
         /// </summary>
         /// <returns>Request settings.</returns>
