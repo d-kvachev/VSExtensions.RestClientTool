@@ -90,12 +90,76 @@
                                                 <ColumnDefinition />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0" Text="{StaticResource QueryParameterEnabledColumnTitle}" />
-                                            <TextBlock Grid.Column="1" Text="{StaticResource QueryParameterNameColumnTitle}" />
+                                            <TextBlock Grid.Column="1" Text="{StaticResource QueryParameterKeyColumnTitle}" />
                                             <TextBlock Grid.Column="2" Text="{StaticResource QueryParameterValueColumnTitle}" />
                                         </Grid>
 
                                         <ScrollViewer>
                                             <ItemsControl ItemsSource="{Binding Parameters}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid Height="30px">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="0.08*" />
+                                                                <ColumnDefinition />
+                                                                <ColumnDefinition />
+                                                            </Grid.ColumnDefinitions>
+                                                            <CheckBox Grid.Column="0"
+                                                                      VerticalAlignment="Center"
+                                                                      HorizontalAlignment="Center"
+                                                                      Style="{DynamicResource {x:Static vsshell:VsResourceKeys.CheckBoxStyleKey}}"
+                                                                      IsChecked="{Binding Enabled}" />
+                                                            <TextBox Grid.Column="1"
+                                                                     Margin="1"
+                                                                     VerticalContentAlignment="Center"
+                                                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                                                                     Text="{Binding Key}" />
+                                                            <TextBox Grid.Column="2"
+                                                                     Margin="1"
+                                                                     VerticalContentAlignment="Center"
+                                                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                                                                     Text="{Binding Value}" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </DockPanel>
+                                </TabItem.Content>
+                            </TabItem>
+
+                            <TabItem DataContext="{Binding HttpHeaders}"
+                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
+                                <TabItem.Header>
+                                    <TextBlock Text="{StaticResource HttpHeadersTabHeader}" />
+                                </TabItem.Header>
+                                <TabItem.Content>
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Top" Padding="0,5">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                                                        Command="{Binding AddCommand}"
+                                                        Content="{StaticResource AddButtonContent}" />
+                                                <Separator Style="{StaticResource VsVerticalSeparator}" />
+                                                <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                                                        Command="{Binding RemoveDisabledCommand}"
+                                                        Content="{StaticResource RemoveDisabledButtonContent}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Grid DockPanel.Dock="Top" Height="15px">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.08*" />
+                                                <ColumnDefinition />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{StaticResource HttpHeaderEnabledColumnTitle}" />
+                                            <TextBlock Grid.Column="1" Text="{StaticResource HttpHeaderKeyColumnTitle}" />
+                                            <TextBlock Grid.Column="2" Text="{StaticResource HttpHeaderValueColumnTitle}" />
+                                        </Grid>
+
+                                        <ScrollViewer>
+                                            <ItemsControl ItemsSource="{Binding Headers}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <Grid Height="30px">

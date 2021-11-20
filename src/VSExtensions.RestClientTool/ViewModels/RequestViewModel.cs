@@ -4,6 +4,7 @@
 
     using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.ViewModels.HttpHeaders;
     using VSExtensions.RestClientTool.ViewModels.QueryParameters;
 
     /// <summary>
@@ -58,9 +59,18 @@
         public QueryParametersViewModel QueryParameters { get; } = new QueryParametersViewModel();
 
         /// <summary>
+        /// Gets a HTTP headers view model containing logic for HTTP headers customization.
+        /// </summary>
+        public HttpHeadersViewModel HttpHeaders { get; } = new HttpHeadersViewModel();
+
+        /// <summary>
         /// Sets request data context.
         /// </summary>
         /// <param name="context">Request data context.</param>
-        public void SetContext(IRequestDataContext context) => QueryParameters.SetContext(context.QueryParameters);
+        public void SetContext(IRequestDataContext context)
+        {
+            QueryParameters.SetContext(context.QueryParameters);
+            HttpHeaders.SetContext(context.HttpHeaders);
+        }
     }
 }

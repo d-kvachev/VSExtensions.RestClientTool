@@ -13,6 +13,11 @@
         IQueryParametersDataContext QueryParameters { get; }
 
         /// <summary>
+        /// Gets HTTP headers data context.
+        /// </summary>
+        IHttpHeadersDataContext HttpHeaders { get; }
+
+        /// <summary>
         /// Returns request settings.
         /// </summary>
         /// <returns>Request settings.</returns>

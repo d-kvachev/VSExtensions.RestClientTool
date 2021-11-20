@@ -2,7 +2,6 @@
 {
     using System.Linq;
 
-    using VSExtensions.RestClientTool.Commands;
     using VSExtensions.RestClientTool.Context.Abstractions;
 
     /// <summary>

@@ -9,8 +9,13 @@
     <clr:String x:Key="RequestBlockTitle">Customize Request</clr:String>
     <clr:String x:Key="QueryParametersTabHeader">Query Parameters</clr:String>
     <clr:String x:Key="QueryParameterEnabledColumnTitle">Enabled</clr:String>
-    <clr:String x:Key="QueryParameterNameColumnTitle">Parameter Name</clr:String>
+    <clr:String x:Key="QueryParameterKeyColumnTitle">Parameter Key</clr:String>
     <clr:String x:Key="QueryParameterValueColumnTitle">Parameter Value</clr:String>
+
+    <clr:String x:Key="HttpHeadersTabHeader">HTTP Headers</clr:String>
+    <clr:String x:Key="HttpHeaderEnabledColumnTitle">Enabled</clr:String>
+    <clr:String x:Key="HttpHeaderKeyColumnTitle">Header Key</clr:String>
+    <clr:String x:Key="HttpHeaderValueColumnTitle">Header Value</clr:String>
     
     <clr:String x:Key="ResponseBlockTitle">Response</clr:String>
 
