@@ -1,23 +1,23 @@
-﻿namespace VSExtensions.RestClientTool.Commands.QueryParameters
+﻿namespace VSExtensions.RestClientTool.Commands.HttpHeaders
 {
     using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
 
     /// <summary>
-    /// Represents a command that adds a new query parameter to the request data.
+    /// Represents a command that adds a new HTTP header to the request data.
     /// </summary>
     internal class AddCommand : CommandBase
     {
         /// <summary>
-        /// Query parameters data context.
+        /// Request headers data context.
         /// </summary>
-        private readonly IQueryParametersDataContext _queryParameters;
+        private readonly IHttpHeadersDataContext _headers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddCommand"/> class.
         /// </summary>
-        /// <param name="parameters">Query parameters data context.</param>
-        public AddCommand(IQueryParametersDataContext queryParameters) => _queryParameters = queryParameters;
+        /// <param name="headers">Request headers data context.</param>
+        public AddCommand(IHttpHeadersDataContext headers) => _headers = headers;
 
         /// <inheritdoc />
         public override bool CanExecute(object parameter) => true;
@@ -25,8 +25,8 @@
         /// <inheritdoc />
         public override void Execute(object parameter)
         {
-            var newParameter = new QueryParameter(true);
-            _queryParameters.Add(newParameter);
+            var newHeader = new HttpHeader(true);
+            _headers.Add(newHeader);
         }
     }
 }

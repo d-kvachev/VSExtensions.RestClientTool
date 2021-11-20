@@ -86,9 +86,10 @@
         {
             var settings = _request.GetSettings();
             var queryParameters = _request.QueryParameters.Enumerate();
+            var headers = _request.HttpHeaders.Enumerate();
 
             string responseBody;
-            using (var request = CreateRequest(settings, queryParameters))
+            using (var request = CreateRequest(settings, queryParameters, headers))
                 responseBody = await _restApiClient.SendAsync(request).ConfigureAwait(false);
 
             responseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
@@ -125,9 +126,10 @@
         /// </summary>
         /// <param name="settings">Request settings.</param>
         /// <param name="parameters">Request query parameters.</param>
+        /// <param name="headers">Request HTTP headers.</param>
         /// <returns>A <see cref="HttpRequestMessage"/> instance.</returns>
         /// <exception cref="InvalidOperationException">Invalid request URI.</exception>
-        private HttpRequestMessage CreateRequest(RequestSettings settings, IEnumerable<QueryParameter> parameters)
+        private HttpRequestMessage CreateRequest(RequestSettings settings, IEnumerable<QueryParameter> parameters, IEnumerable<HttpHeader> headers)
         {
             var uriValid = TryConvertToUri(settings.Uri, out var requestUri);
             if (!uriValid)
@@ -136,7 +138,10 @@
             var httpMethod = ToHttpMethod(settings.Type);
             requestUri = AppendQueryParameters(requestUri, parameters);
 
-            return new HttpRequestMessage(httpMethod, requestUri);
+            var request = new HttpRequestMessage(httpMethod, requestUri);
+            AddHttpHeaders(request, headers);
+
+            return request;
         }
 
         /// <summary>
@@ -181,15 +186,30 @@
         private Uri AppendQueryParameters(Uri requestUri, IEnumerable<QueryParameter> parameters)
         {
             var queryParameters = parameters.Where(p => p.Enabled).Select(p => p.ToString()).ToList();
-            if (queryParameters.Count == 0)
+            if (queryParameters.Count == default)
                 return requestUri;
 
-            var queryParametersString = $"{string.Join("&", queryParameters)}";
-
-            var uriBuilder = new UriBuilder(requestUri);
-            uriBuilder.Query = queryParametersString;
+            var uriBuilder = new UriBuilder(requestUri)
+            {
+                Query = $"{string.Join("&", queryParameters)}"
+            };
 
             return uriBuilder.Uri;
+        }
+
+        /// <summary>
+        /// Adds custom HTTP headers to the request message.
+        /// </summary>
+        /// <param name="request">The request message.</param>
+        /// <param name="headers">Custom HTTP headers.</param>
+        private void AddHttpHeaders(HttpRequestMessage request, IEnumerable<HttpHeader> headers)
+        {
+            var httpHeaders = headers.Where(h => h.Enabled).ToList();
+            if (httpHeaders.Count == default)
+                return;
+
+            foreach (var header in httpHeaders)
+                request.Headers.Add(header.Key, header.Value);
         }
     }
 }
