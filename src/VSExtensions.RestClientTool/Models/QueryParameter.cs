@@ -41,5 +41,8 @@
         /// Gets the query parameter value.
         /// </summary>
         public string Value { get; }
+
+        /// <inheritdoc />
+        public override string ToString() => $"{Key}={Value}";
     }
 }

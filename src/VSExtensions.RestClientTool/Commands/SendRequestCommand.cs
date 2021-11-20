@@ -1,7 +1,10 @@
 ﻿namespace VSExtensions.RestClientTool.Commands
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Net.Http;
     using System.Threading.Tasks;
 
     using Newtonsoft.Json;
@@ -82,16 +85,12 @@
         private async Task SendRequestAsync()
         {
             var settings = _request.GetSettings();
+            var queryParameters = _request.QueryParameters.Enumerate();
 
-            var uriValid = TryConvertToUri(settings.Uri, out var requestUri);
-            if (!uriValid)
-                throw new InvalidOperationException($"Invalid request URI: '{settings.Uri}'");
+            string responseBody;
+            using (var request = CreateRequest(settings, queryParameters))
+                responseBody = await _restApiClient.SendAsync(request).ConfigureAwait(false);
 
-            var requestTypeSupported = settings.Type == RequestType.Get;
-            if (!requestTypeSupported)
-                throw new NotSupportedException($"Request type is not supported: '{settings.Type}'");
-
-            var responseBody = await _restApiClient.GetAsync(requestUri).ConfigureAwait(false);
             responseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
 
             var response = new ResponseData(responseBody);
@@ -122,6 +121,25 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="HttpRequestMessage"/> instance based on data provided.
+        /// </summary>
+        /// <param name="settings">Request settings.</param>
+        /// <param name="parameters">Request query parameters.</param>
+        /// <returns>A <see cref="HttpRequestMessage"/> instance.</returns>
+        /// <exception cref="InvalidOperationException">Invalid request URI.</exception>
+        private HttpRequestMessage CreateRequest(RequestSettings settings, IEnumerable<QueryParameter> parameters)
+        {
+            var uriValid = TryConvertToUri(settings.Uri, out var requestUri);
+            if (!uriValid)
+                throw new InvalidOperationException($"Invalid request URI: '{settings.Uri}'");
+
+            var httpMethod = ToHttpMethod(settings.Type);
+            requestUri = AppendQueryParameters(requestUri, parameters);
+
+            return new HttpRequestMessage(httpMethod, requestUri);
+        }
+
+        /// <summary>
         /// Attempts to convert string representation of request URI to an actual <see cref="Uri"/> object.
         /// </summary>
         /// <param name="uriString">URI string.</param>
@@ -138,6 +156,40 @@
 
             uri = default;
             return false;
+        }
+
+        /// <summary>
+        /// Gets an <see cref="HttpMethod"/> value that corresponds to <paramref name="type"/> provided.
+        /// </summary>
+        /// <param name="type">The type of a request.</param>
+        /// <returns>A suitable HttpMethod value.</returns>
+        /// <exception cref="NotSupportedException">Request type is not supported.</exception>
+        private HttpMethod ToHttpMethod(RequestType type)
+        {
+            switch (type) {
+                case RequestType.Get: return HttpMethod.Get;
+                default: throw new NotSupportedException($"Request type is not supported: '{type}'");
+            }
+        }
+
+        /// <summary>
+        /// Appends query parameters string to request URI.
+        /// </summary>
+        /// <param name="requestUri">Request URI.</param>
+        /// <param name="parameters">Request query parameters.</param>
+        /// <returns>Request URI with query parameters.</returns>
+        private Uri AppendQueryParameters(Uri requestUri, IEnumerable<QueryParameter> parameters)
+        {
+            var queryParameters = parameters.Where(p => p.Enabled).Select(p => p.ToString()).ToList();
+            if (queryParameters.Count == 0)
+                return requestUri;
+
+            var queryParametersString = $"{string.Join("&", queryParameters)}";
+
+            var uriBuilder = new UriBuilder(requestUri);
+            uriBuilder.Query = queryParametersString;
+
+            return uriBuilder.Uri;
         }
     }
 }

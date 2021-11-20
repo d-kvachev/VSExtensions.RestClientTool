@@ -1,6 +1,5 @@
 ﻿namespace VSExtensions.RestClientTool.Services
 {
-    using System;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -10,13 +9,16 @@
     internal class RestApiClient : IRestApiClient
     {
         /// <inheritdoc />
-        public async Task<string> GetAsync(Uri requestUri)
+        public async Task<string> SendAsync(HttpRequestMessage message)
         {
             using (var client = GetHttpClient())
-            using (var response = await client.GetAsync(requestUri, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
             {
-                response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var response = await client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                using (response)
+                {
+                    response.EnsureSuccessStatusCode();
+                    return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
             }
         }
 
