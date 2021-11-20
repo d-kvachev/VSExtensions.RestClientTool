@@ -1,18 +1,18 @@
 ﻿namespace VSExtensions.RestClientTool.ViewModels
 {
-    using VSExtensions.RestClientTool.Abstractions;
-
     /// <summary>
     /// A response view model, containing logic for response processing.
     /// </summary>
-    internal class ResponseViewModel : ViewModelBase, IResponseData
+    internal class ResponseViewModel : ViewModelBase
     {
         /// <summary>
         /// The body of the response received after the request was sent
         /// </summary>
         private string _responseBody;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets or sets the body of the received response.
+        /// </summary>
         public string ResponseBody
         {
             get => _responseBody;

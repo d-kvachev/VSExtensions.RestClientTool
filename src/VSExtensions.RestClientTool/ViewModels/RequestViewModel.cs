@@ -1,14 +1,13 @@
 ﻿namespace VSExtensions.RestClientTool.ViewModels
 {
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
-    using VSExtensions.RestClientTool.Abstractions;
     using VSExtensions.RestClientTool.Models;
 
     /// <summary>
     /// A request view model containing logic for request customization.
     /// </summary>
-    internal class RequestViewModel : ViewModelBase, IRequestParameters
+    internal class RequestViewModel : ViewModelBase
     {
         /// <summary>
         /// Selected request type.
@@ -23,7 +22,7 @@
         /// <summary>
         /// Gets available request types.
         /// </summary>
-        public IReadOnlyCollection<RequestType> AvailableRequestTypes => RequestTypesProvider.Get();
+        public ObservableCollection<RequestType> AvailableRequestTypes { get; } = new ObservableCollection<RequestType>(RequestTypesProvider.Get());
 
         /// <summary>
         /// Gets or sets selected request type.
