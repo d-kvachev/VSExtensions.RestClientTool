@@ -18,6 +18,11 @@
         IHttpHeadersDataContext HttpHeaders { get; }
 
         /// <summary>
+        /// Gets body data context.
+        /// </summary>
+        IBodyDataContext Body { get; }
+
+        /// <summary>
         /// Returns request settings.
         /// </summary>
         /// <returns>Request settings.</returns>
