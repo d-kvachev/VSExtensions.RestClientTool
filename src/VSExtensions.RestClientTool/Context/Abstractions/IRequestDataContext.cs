@@ -1,6 +1,6 @@
 ﻿namespace VSExtensions.RestClientTool.Context.Abstractions
 {
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
 
     /// <summary>
     /// Request data context interface.
@@ -16,6 +16,11 @@
         /// Gets HTTP headers data context.
         /// </summary>
         IHttpHeadersDataContext HttpHeaders { get; }
+
+        /// <summary>
+        /// Gets body data context.
+        /// </summary>
+        IBodyDataContext Body { get; }
 
         /// <summary>
         /// Returns request settings.

@@ -1,8 +1,9 @@
 ﻿namespace VSExtensions.RestClientTool.Context
 {
     using VSExtensions.RestClientTool.Context.Abstractions;
-    using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
     using VSExtensions.RestClientTool.ViewModels;
+    using VSExtensions.RestClientTool.ViewModels.Body;
     using VSExtensions.RestClientTool.ViewModels.HttpHeaders;
     using VSExtensions.RestClientTool.ViewModels.QueryParameters;
 
@@ -22,6 +23,11 @@
         private readonly IHttpHeadersDataContext<HttpHeadersViewModel> _httpHeaders = new HttpHeadersViewModelDataContext();
 
         /// <summary>
+        /// Body data context.
+        /// </summary>
+        private readonly IBodyDataContext<BodyViewModel> _body = new BodyViewModelDataContext();
+
+        /// <summary>
         /// The request view model that is used as the data source.
         /// </summary>
         private RequestViewModel _viewModel;
@@ -33,12 +39,16 @@
         public IHttpHeadersDataContext HttpHeaders => _httpHeaders;
 
         /// <inheritdoc />
+        public IBodyDataContext Body => _body;
+
+        /// <inheritdoc />
         public void Initialize(RequestViewModel dataSource)
         {
             _viewModel = dataSource;
 
             _queryParameters.Initialize(dataSource.QueryParameters);
             _httpHeaders.Initialize(dataSource.HttpHeaders);
+            _body.Initialize(dataSource.Body);
         }
 
         /// <inheritdoc />

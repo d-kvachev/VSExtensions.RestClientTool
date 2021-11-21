@@ -11,6 +11,8 @@
 
     using VSExtensions.RestClientTool.Context.Abstractions;
     using VSExtensions.RestClientTool.Models;
+    using VSExtensions.RestClientTool.Models.Request;
+    using VSExtensions.RestClientTool.Models.Response;
     using VSExtensions.RestClientTool.Services;
 
     /// <summary>
@@ -87,9 +89,10 @@
             var settings = _request.GetSettings();
             var queryParameters = _request.QueryParameters.Enumerate();
             var headers = _request.HttpHeaders.Enumerate();
+            var body = _request.Body;
 
             string responseBody;
-            using (var request = CreateRequest(settings, queryParameters, headers))
+            using (var request = CreateRequest(settings, queryParameters, headers, body))
                 responseBody = await _restApiClient.SendAsync(request).ConfigureAwait(false);
 
             responseBody = TryIndentJson(responseBody, out var indented) ? indented : responseBody;
@@ -127,9 +130,14 @@
         /// <param name="settings">Request settings.</param>
         /// <param name="parameters">Request query parameters.</param>
         /// <param name="headers">Request HTTP headers.</param>
+        /// <param name="body">Request body.</param>
         /// <returns>A <see cref="HttpRequestMessage"/> instance.</returns>
         /// <exception cref="InvalidOperationException">Invalid request URI.</exception>
-        private HttpRequestMessage CreateRequest(RequestSettings settings, IEnumerable<QueryParameter> parameters, IEnumerable<HttpHeader> headers)
+        private HttpRequestMessage CreateRequest(
+            RequestSettings settings,
+            IEnumerable<QueryParameter> parameters,
+            IEnumerable<HttpHeader> headers,
+            IBodyDataContext body)
         {
             var uriValid = TryConvertToUri(settings.Uri, out var requestUri);
             if (!uriValid)
@@ -140,6 +148,7 @@
 
             var request = new HttpRequestMessage(httpMethod, requestUri);
             AddHttpHeaders(request, headers);
+            AddBody(request, body);
 
             return request;
         }
@@ -173,6 +182,7 @@
         {
             switch (type) {
                 case RequestType.Get: return HttpMethod.Get;
+                case RequestType.Post: return HttpMethod.Post;
                 default: throw new NotSupportedException($"Request type is not supported: '{type}'");
             }
         }
@@ -210,6 +220,19 @@
 
             foreach (var header in httpHeaders)
                 request.Headers.Add(header.Key, header.Value);
+        }
+
+        /// <summary>
+        /// Adds content to the request message.
+        /// </summary>
+        /// <param name="request">The request message.</param>
+        /// <param name="body">Request content.</param>
+        private void AddBody(HttpRequestMessage request, IBodyDataContext body)
+        {
+            if (!body.HasContent)
+                return;
+
+            request.Content = body.GetHttpContent();
         }
     }
 }

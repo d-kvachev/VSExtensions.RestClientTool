@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool.Models
+﻿namespace VSExtensions.RestClientTool.Models.Response
 {
     /// <summary>
     /// Contains response data.

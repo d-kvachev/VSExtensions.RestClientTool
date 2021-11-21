@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool.Models
+﻿namespace VSExtensions.RestClientTool.Models.Request
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,12 @@
         /// <summary>
         /// HTTP GET.
         /// </summary>
-        Get
+        Get,
+
+        /// <summary>
+        /// HTTP POST.
+        /// </summary>
+        Post
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace VSExtensions.RestClientTool.Models
+﻿namespace VSExtensions.RestClientTool.Models.Request
 {
     /// <summary>
     /// Contains settings of a request.

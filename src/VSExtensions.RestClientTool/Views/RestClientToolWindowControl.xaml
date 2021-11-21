@@ -64,8 +64,7 @@
                         <TabControl TabStripPlacement="Top"
                                     DataContext="{Binding RequestViewModel}"
                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabControlNavigationStyleKey}}">
-                            <TabItem DataContext="{Binding QueryParameters}"
-                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
+                            <TabItem DataContext="{Binding QueryParameters}" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
                                 <TabItem.Header>
                                     <TextBlock Text="{StaticResource QueryParametersTabHeader}" />
                                 </TabItem.Header>
@@ -128,8 +127,7 @@
                                 </TabItem.Content>
                             </TabItem>
 
-                            <TabItem DataContext="{Binding HttpHeaders}"
-                                     Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
+                            <TabItem DataContext="{Binding HttpHeaders}" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
                                 <TabItem.Header>
                                     <TextBlock Text="{StaticResource HttpHeadersTabHeader}" />
                                 </TabItem.Header>
@@ -188,6 +186,55 @@
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
                                         </ScrollViewer>
+                                    </DockPanel>
+                                </TabItem.Content>
+                            </TabItem>
+
+                            <TabItem DataContext="{Binding Body}" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTabItemNavigationStyleKey}}">
+                                <TabItem.Header>
+                                    <TextBlock Text="{StaticResource BodyTabHeader}" />
+                                </TabItem.Header>
+                                <TabItem.Content>
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,5" Height="25">
+                                            <TextBlock VerticalAlignment="Center" Margin="0,0,10,0" Text="{StaticResource ContentTypeText}" />
+                                            <ComboBox VerticalContentAlignment="Center"
+                                                      Width="80"
+                                                      Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
+                                                      ItemsSource="{Binding AvailableContentTypes}"
+                                                      SelectedItem="{Binding ContentType}" />
+                                        </StackPanel>
+
+                                        <ContentPresenter Content="{Binding Content}">
+                                            <ContentPresenter.Resources>
+                                                <DataTemplate x:Key="EmptyContentBodyPresenter">
+                                                    <TextBlock Text="{StaticResource EmptyContentText}" />
+                                                </DataTemplate>
+                                                <DataTemplate x:Key="JsonContentBodyPresenter">
+                                                    <TextBox TextWrapping="Wrap"
+                                                             AcceptsReturn="True"
+                                                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                             ScrollViewer.CanContentScroll="True"
+                                                             Padding="10"
+                                                             Style="{StaticResource VsTextBoxStyle}"
+                                                             Text="{Binding Text}" />
+                                                </DataTemplate>
+                                            </ContentPresenter.Resources>
+
+                                            <ContentPresenter.Style>
+                                                <Style TargetType="{x:Type ContentPresenter}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Type}" Value="None">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource EmptyContentBodyPresenter}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Type}" Value="Json">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource JsonContentBodyPresenter}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentPresenter.Style>
+                                        </ContentPresenter>
                                     </DockPanel>
                                 </TabItem.Content>
                             </TabItem>
