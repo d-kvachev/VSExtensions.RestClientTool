@@ -12,7 +12,12 @@
         /// <summary>
         /// HTTP GET.
         /// </summary>
-        Get
+        Get,
+
+        /// <summary>
+        /// HTTP POST.
+        /// </summary>
+        Post
     }
 
     /// <summary>

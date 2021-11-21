@@ -182,6 +182,7 @@
         {
             switch (type) {
                 case RequestType.Get: return HttpMethod.Get;
+                case RequestType.Post: return HttpMethod.Post;
                 default: throw new NotSupportedException($"Request type is not supported: '{type}'");
             }
         }
