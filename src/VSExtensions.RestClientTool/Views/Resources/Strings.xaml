@@ -16,7 +16,11 @@
     <clr:String x:Key="HttpHeaderEnabledColumnTitle">Enabled</clr:String>
     <clr:String x:Key="HttpHeaderKeyColumnTitle">Header Key</clr:String>
     <clr:String x:Key="HttpHeaderValueColumnTitle">Header Value</clr:String>
-    
+
+    <clr:String x:Key="BodyTabHeader">Body</clr:String>
+    <clr:String x:Key="ContentTypeText">Content Type:</clr:String>
+    <clr:String x:Key="EmptyContentText">No Content</clr:String>
+
     <clr:String x:Key="ResponseBlockTitle">Response</clr:String>
 
 </ResourceDictionary>
